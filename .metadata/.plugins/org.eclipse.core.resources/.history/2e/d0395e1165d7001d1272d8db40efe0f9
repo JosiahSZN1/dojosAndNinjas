@@ -1,0 +1,24 @@
+package com.codingdojo.dojosandninjas.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class MainController {
+//	get routes
+	@GetMapping("/dojos/new")
+	public String newDojo() {
+		return "newDojo.jsp";
+	}
+	@GetMapping("/dojos/{id}")
+	public String showDojo() {
+		return "showDojo.jsp";
+	}
+	@GetMapping("/ninjas/new")
+	public String newNinja() {
+		return "newNinja.jsp";
+	}
+//	post routes
+	
+	
+}

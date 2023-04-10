@@ -1,0 +1,15 @@
+package com.codingdojo.dojosandninjas.services;
+
+import org.springframework.stereotype.Service;
+
+import com.codingdojo.dojosandninjas.repositories.DojoRepository;
+
+@Service
+public class DojoService {
+	private final DojoRepository dojoRepository;
+	
+	public DojoService(DojoRepository dojoRepository) {
+		this.dojoRepository = dojoRepository;
+	}
+
+}

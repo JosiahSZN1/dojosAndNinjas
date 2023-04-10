@@ -1,0 +1,63 @@
+package com.codingdojo.dojosandninjas.controllers;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.codingdojo.dojosandninjas.models.Dojo;
+import com.codingdojo.dojosandninjas.models.Ninja;
+import com.codingdojo.dojosandninjas.services.DojoService;
+import com.codingdojo.dojosandninjas.services.NinjaService;
+
+@Controller
+public class MainController {
+	@Autowired DojoService dojoService;
+	@Autowired NinjaService ninjaService;
+//	get routes
+	@GetMapping("/dojos/new")
+	public String rNewDojo(@ModelAttribute("dojo") Dojo dojo) {
+		return "newDojo.jsp";
+	}
+	@GetMapping("/dojos/{id}")
+	public String rShowDojo(
+			@PathVariable("id") Long id,
+			Model model) {
+		model.addAttribute("dojo", dojoService.findDojo(id));
+		return "showDojo.jsp";
+	}
+	@GetMapping("/ninjas/new")
+	public String rNewNinja(@ModelAttribute("ninja") Ninja ninja,
+			Model model) {
+		model.addAttribute("dojos", dojoService.getAllDojos());
+		return "newNinja.jsp";
+	}
+//	post routes
+	@PostMapping("/dojos/new")
+	public String pNewDojo(
+			@Valid @ModelAttribute("dojo") Dojo dojo,
+			BindingResult result) {
+		if(result.hasErrors()) {
+			return "newDojo.jsp";
+		}
+		dojoService.createDojo(dojo);
+		return "redirect:/ninjas/new";
+	}
+	@PostMapping("/ninjas/new")
+	public String pNewNinja(
+			@Valid @ModelAttribute("ninja") Ninja ninja,
+			BindingResult result) {
+		if(result.hasErrors()) {
+			return "newNinja.jsp";
+		}
+		Ninja newNinja = ninjaService.createNinja(ninja);
+		return "redirect:/dojos/" + newNinja.getDojo().getId();
+	}
+	
+}
